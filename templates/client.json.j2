@@ -1,0 +1,7 @@
+{
+  "client": {
+    "name": "{{ ansible_fqdn }}",
+    "address": "{{ ansible_eth0["ipv4"]["address"] }}",
+    "subscriptions": {{ sensu_client_subscriptions | to_nice_json }}
+  }
+}

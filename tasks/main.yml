@@ -1,0 +1,44 @@
+---
+
+- apt_key: id=7580C77F url=http://repos.sensuapp.org/apt/pubkey.gpg state=present
+- apt_repository: repo='deb http://repos.sensuapp.org/apt sensu main' state=present
+- apt: pkg=sensu={{ sensu_package_version }}
+
+- name: sensu setup to use the embedded ruby
+  copy: src=sensu-default dest=/etc/default/sensu owner=root group=root mode=0644
+  notify: restart sensu-client
+
+- name: fetch sensu community plugins 
+  git: >
+    repo=https://github.com/sensu/sensu-community-plugins.git
+    dest=/etc/sensu/community
+    version={{ sensu_community_plugins_version }}
+    update=no
+
+- name: sensu checks directory
+  file: dest=/etc/sensu/conf.d/checks state=directory owner=root mode=0755
+
+- name: sensu cert directory
+  file: dest=/etc/sensu/ssl state=directory owner=sensu mode=0750
+
+- name: install sensu cert
+  when: sensu_client_cert
+  template: src=sensu-client-cert.pem.j2 dest=/etc/sensu/ssl/cert.pem owner=root group=sensu mode=0640
+  notify: restart sensu-client
+
+- name: install sensu key
+  when: sensu_client_key
+  template: src=sensu-client-key.pem.j2 dest=/etc/sensu/ssl/key.pem owner=root group=sensu mode=0640
+  notify: restart sensu-client
+
+- name: sensu root config
+  copy: src=config.json dest=/etc/sensu/config.json owner=root mode=0644
+
+- name: sensu client config
+  template: src={{ item }}.json.j2 dest=/etc/sensu/conf.d/{{ item }}.json owner=root group=sensu mode=0640
+  notify: restart sensu-client
+  with_items:
+  - rabbitmq
+  - client
+
+- include: standalone-checks.yml

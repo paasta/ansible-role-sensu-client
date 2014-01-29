@@ -1,0 +1,18 @@
+---
+sensu_package_version: 0.12.2-1
+
+sensu_community_plugins_version: f329f6d6f68d26478915ab6bd504e30d280754fa
+
+sensu_client_subscriptions:
+- all
+
+sensu_client_cert:
+sensu_client_key:
+
+sensu_process_log_enabled: false
+sensu_process_log: []
+
+rabbitmq_host: localhost
+rabbitmq_port: 5672
+rabbitmq_user: sensu
+rabbitmq_password: pass
