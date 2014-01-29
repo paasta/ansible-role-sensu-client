@@ -23,7 +23,7 @@
           occurrences: 2
           auto_resolve: true
         check-mnt-writable:
-          command: /etc/sensu/community/plugins/system/check-fs-writable.rb -d /mnt
+          command: sudo /etc/sensu/community/plugins/system/check-fs-writable.rb -d /mnt
           standalone: true
           handlers:
             - pagerduty

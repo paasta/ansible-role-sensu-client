@@ -15,6 +15,14 @@
     version={{ sensu_community_plugins_version }}
     update=no
 
+- name: give sudo permission for some of the plugins
+  copy: >
+    src=sensu-sudoers
+    dest=/etc/sudoers.d/sensu
+    owner=root
+    group=root
+    mode=0440
+
 - name: sensu checks directory
   file: dest=/etc/sensu/conf.d/checks state=directory owner=root mode=0755
 
