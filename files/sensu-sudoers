@@ -1,1 +1,0 @@
-sensu ALL= NOPASSWD: /etc/sensu/community/plugins/system/check-fs-writable.rb

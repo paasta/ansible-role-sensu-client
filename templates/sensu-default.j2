@@ -1,0 +1,6 @@
+EMBEDDED_RUBY=true
+
+# Adds the sensu-community plugins into the path
+export PATH=`find {{ sensu_community }}/plugins -type d | sort | tr '\n' ':'`$PATH
+# Adds the sensu-community handlers into the path
+export PATH=`find {{ sensu_community }}/handlers -type d | sort | tr '\n' ':'`$PATH

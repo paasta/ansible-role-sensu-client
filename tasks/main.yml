@@ -5,19 +5,24 @@
 - apt: pkg=sensu={{ sensu_package_version }}
 
 - name: sensu setup to use the embedded ruby
-  copy: src=sensu-default dest=/etc/default/sensu owner=root group=root mode=0644
+  template: >
+    src=sensu-default.j2
+    dest=/etc/default/sensu
+    owner=root
+    group=root
+    mode=0644
   notify: restart sensu-client
 
 - name: fetch sensu community plugins 
   git: >
     repo=https://github.com/sensu/sensu-community-plugins.git
-    dest=/etc/sensu/community
+    dest={{ sensu_community }}
     version={{ sensu_community_plugins_version }}
     update=no
 
 - name: give sudo permission for some of the plugins
-  copy: >
-    src=sensu-sudoers
+  template: >
+    src=sensu-sudoers.j2
     dest=/etc/sudoers.d/sensu
     owner=root
     group=root
@@ -27,26 +32,44 @@
   file: dest=/etc/sensu/conf.d/checks state=directory owner=root mode=0755
 
 - name: sensu cert directory
-  file: dest=/etc/sensu/ssl state=directory owner=sensu mode=0750
+  file: dest=/etc/sensu/ssl state=directory owner=root group=sensu mode=0750
 
 - name: install sensu cert
   when: sensu_client_cert
-  template: src=sensu-client-cert.pem.j2 dest=/etc/sensu/ssl/cert.pem owner=root group=sensu mode=0640
+  copy: >
+    content={{ sensu_client_cert }}
+    dest=/etc/sensu/ssl/cert.pem
+    owner=root
+    group=sensu
+    mode=0440
   notify: restart sensu-client
 
 - name: install sensu key
   when: sensu_client_key
-  template: src=sensu-client-key.pem.j2 dest=/etc/sensu/ssl/key.pem owner=root group=sensu mode=0640
+  copy: >
+    content={{ sensu_client_key }}
+    dest=/etc/sensu/ssl/key.pem
+    owner=root
+    group=sensu
+    mode=0440
   notify: restart sensu-client
 
 - name: sensu root config
-  copy: src=config.json dest=/etc/sensu/config.json owner=root mode=0644
+  copy: >
+    content="{}"
+    dest=/etc/sensu/config.json
+    owner=root
+    group=root
+    mode=0644
 
 - name: sensu client config
-  template: src={{ item }}.json.j2 dest=/etc/sensu/conf.d/{{ item }}.json owner=root group=sensu mode=0640
+  template: >
+    src={{ item }}.json.j2
+    dest=/etc/sensu/conf.d/{{ item }}.json
+    owner=root
+    group=sensu
+    mode=0640
   notify: restart sensu-client
   with_items:
   - rabbitmq
   - client
-
-- include: standalone-checks.yml
