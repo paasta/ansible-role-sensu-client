@@ -1,5 +1,5 @@
 Defaults:sensu !requiretty
-Defaults:sensu secure_path = /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+Defaults:sensu secure_path = /opt/sensu/embedded/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 {% for plugin in sensu_sudo_plugins %}
 sensu ALL = NOPASSWD: {{ plugin }}
