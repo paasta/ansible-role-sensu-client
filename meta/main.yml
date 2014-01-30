@@ -1,0 +1,13 @@
+---
+galaxy_info:
+  author: zimbatm
+  description: a role that installs the sensu-client on your machine
+  license: BSD
+  min_ansible_version: 1.4
+  platforms:
+    - name: Ubuntu
+      versions:
+      - precise
+  categories:
+    - monitoring
+dependencies: []
