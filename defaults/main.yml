@@ -14,6 +14,8 @@ sensu_client_subscriptions:
 sensu_sudo_plugins:
 - "{{ sensu_community }}/plugins/system/check-fs-writable.rb"
 
+sensu_plugin_gems: []
+
 sensu_client_cert:
 sensu_client_key:
 

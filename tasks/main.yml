@@ -28,6 +28,12 @@
     group=root
     mode=0440
 
+- name: installs gem dependencies for some of the plugins
+  gem: >
+    name={{ item.name }} version={{ item.version }}
+    state=present user_install=no executable=/opt/sensu/embedded/bin/gem
+  with_items: sensu_plugin_gems
+
 - name: sensu checks directory
   file: dest=/etc/sensu/conf.d/checks state=directory owner=root mode=0755
 
