@@ -92,6 +92,7 @@
     owner=root
     group=sensu
     mode=0640
+    validate="python -mjson.tool %s"
   notify: restart sensu-client
   with_items:
   - rabbitmq
