@@ -37,10 +37,10 @@
 
 - name: fetch sensu community plugins 
   git: >
-    repo=https://github.com/sensu/sensu-community-plugins.git
+    repo={{ sensu_community_repo }}
     dest={{ sensu_community }}
     version={{ sensu_community_plugins_version }}
-    update=no
+    update=yes
 
 - name: give sudo permission for some of the plugins
   template: >

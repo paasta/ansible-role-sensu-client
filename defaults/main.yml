@@ -1,7 +1,8 @@
 ---
 sensu_package_version: 0.12.2-1
 
-sensu_community_plugins_version: f329f6d6f68d26478915ab6bd504e30d280754fa
+sensu_community_repo: https://github.com/paasta/sensu-community-plugins.git
+sensu_community_plugins_version: sensu-client
 sensu_community: /usr/lib/sensu-community
 
 sensu_client_subscriptions:
