@@ -1,15 +1,17 @@
-# Upstart: /etc/init/sensu-client.conf
+# Upstart: /etc/init/sensu-{{ item }}.conf
 
-description "sensu client"
+description "sensu {{ item }}"
 
 start on (local-filesystems and net-device-up)
 stop on [!12345]
 
 respawn
 
-env PROG=sensu-client
+env PROG=sensu-{{ item }}
 
 chdir /opt/sensu/bin
+setuid sensu
+setgid sensu
 
 pre-start script
   test -x ./$PROG || { stop; exit 0; }
@@ -23,7 +25,6 @@ script
   PLUGINS_DIR=/etc/sensu/plugins
   HANDLERS_DIR=/etc/sensu/handlers
   LOG_DIR=/var/log/sensu
-  USER=sensu
 
   if [ -f /etc/default/sensu ]; then
     . /etc/default/sensu
@@ -40,5 +41,5 @@ script
     export PATH=$PATH:$PLUGINS_DIR:$HANDLERS_DIR
   fi
 
-  exec setuidgid $USER ./$PROG $options
+  exec ./$PROG $options
 end script

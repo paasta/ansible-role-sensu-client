@@ -5,21 +5,26 @@
 - apt: pkg=sensu={{ sensu_package_version }}
 
 - name: remove crummy init.d scripts
-  file: state=absent dest=/etc/init.d/{{ item }}
+  file: state=absent dest=/etc/init.d/sensu-{{ item }}
   with_items:
-  - sensu-api
-  - sensu-client
-  - sensu-dashboard
-  - sensu-server
-  - sensu-service
+  - api
+  - client
+  - dashboard
+  - server
+  - service
 
 - name: install nice upstart init scripts
-  copy: src=init/{{ item }} dest=/etc/init/{{ item }} owner=root group=root mode=0644
+  template: >
+    src=sensu-upstart.conf.j2
+    dest=/etc/init/sensu-{{ item }}.conf
+    owner=root
+    group=root
+    mode=0644
   with_items:
-  - sensu-api.conf
-  - sensu-client.conf
-  - sensu-dashboard.conf
-  - sensu-server.conf
+  - api
+  - client
+  - dashboard
+  - server
 
 - name: sensu setup to use the embedded ruby
   template: >
